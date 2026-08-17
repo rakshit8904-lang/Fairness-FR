@@ -1,0 +1,42 @@
+{
+    "global_validation_threshold": 0.13281222,
+    "gender_specific_thresholds": {
+        "females": 0.13611951,
+        "males": 0.11494075
+    },
+    "overall_before": {
+        "threshold": 0.13281222,
+        "accuracy": 0.883442265795207,
+        "fmr": 0.12200435729847495,
+        "fnmr": 0.1111111111111111,
+        "tar": 0.8888888888888888,
+        "tnr": 0.8779956427015251,
+        "total_pairs": 918,
+        "genuine_pairs": 459,
+        "impostor_pairs": 459,
+        "evaluation": "global_threshold"
+    },
+    "overall_after": {
+        "evaluation": "gender_specific_threshold",
+        "threshold": NaN,
+        "accuracy": 0.8812636165577342,
+        "fmr": 0.13071895424836602,
+        "fnmr": 0.10675381263616558,
+        "tar": 0.8932461873638344,
+        "tnr": 0.869281045751634,
+        "total_pairs": 918,
+        "genuine_pairs": 459,
+        "impostor_pairs": 459
+    },
+    "fairness_gaps": {
+        "before_fmr_gap": 0.04022018813008815,
+        "after_fmr_gap": 0.014742481123718731,
+        "before_fnmr_gap": 0.01576994434137291,
+        "after_fnmr_gap": 0.0036487322201607802,
+        "before_accuracy_gap": 0.012109716953603744,
+        "after_accuracy_gap": 0.00589853682938013
+    },
+    "balanced_subset_size": 628,
+    "balanced_subset_per_gender_label": 157,
+    "note": "Ethnicity-specific thresholding was not performed because the available BFW test split contains only the asian ethnicity. Gender-specific thresholding was evaluated because both females and males are present."
+}

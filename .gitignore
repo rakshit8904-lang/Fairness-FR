@@ -1,0 +1,9 @@
+﻿__pycache__/
+*.pyc
+.venv/
+.env
+*.onnx
+*.pt
+*.pth
+*.h5
+*.keras

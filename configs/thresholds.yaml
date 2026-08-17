@@ -1,0 +1,11 @@
+strategies:
+  - fixed
+  - target_fmr
+  - eer
+
+target_fmr_values:
+  - 0.001
+  - 0.01
+  - 0.1
+
+fixed_threshold: 0.5

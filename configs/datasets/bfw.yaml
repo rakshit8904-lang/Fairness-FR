@@ -1,0 +1,17 @@
+﻿name: bfw
+
+raw_dir: data/raw/rfw/BFW-Release (1)/features/bfw-faces-cropped/Users/jrobby/bfw/bfw-cropped-aligned
+
+processed_dir: data/processed/bfw
+
+metadata_csv: data/metadata/bfw_metadata.csv
+
+image_extension: ".jpg"
+
+has_official_pairs: false
+
+official_pairs_dir: null
+
+demographic_attributes:
+  - ethnicity
+  - gender

@@ -1,0 +1,9 @@
+genuine_impostor_ratio: 1.0
+
+max_pairs_per_identity: 20
+
+enforce_group_balance: true
+
+min_pairs_per_group: 100
+
+random_seed: 42

@@ -1,0 +1,22 @@
+======================================================================
+MODEL COMPARISON SUMMARY
+======================================================================
+
+Best-performing model (accuracy): facenet512 (accuracy=0.9052).
+Model with lowest EER: facenet512 (EER=0.0959).
+Model with highest TAR: facenet512 (TAR=0.9041).
+Fairest model (lowest mean demographic disparity): arcface (mean disparity=0.0062).
+
+Overall ranking (best to worst):
+  1. facenet512 (score=1.50)
+  2. arcface (score=1.75)
+  3. ghostfacenet (score=2.75)
+  4. sface (score=4.00)
+
+Per-model notes:
+  - arcface: strengths: lowest demographic disparity; weaknesses: no notable weaknesses.
+  - facenet512: strengths: highest accuracy, lowest EER, highest TAR; weaknesses: no notable weaknesses.
+  - sface: strengths: no standout strengths; weaknesses: highest FAR, highest FRR.
+  - ghostfacenet: strengths: no standout strengths; weaknesses: no notable weaknesses.
+
+======================================================================

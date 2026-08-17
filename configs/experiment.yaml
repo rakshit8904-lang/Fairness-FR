@@ -1,0 +1,11 @@
+experiment_name: "fairness_face_recognition"
+
+datasets:
+  - bfw
+
+models:
+  - arcface
+
+demographic_attribute: ethnicity
+
+run_improvement_stage: false
