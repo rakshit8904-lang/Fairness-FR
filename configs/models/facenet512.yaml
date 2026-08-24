@@ -1,0 +1,20 @@
+name: facenet512
+weights_path: "deepface"
+
+input_size: 160
+
+embedding_dim: 512
+
+normalization_mean:
+  - 0.5
+  - 0.5
+  - 0.5
+
+normalization_std:
+  - 0.5
+  - 0.5
+  - 0.5
+
+distance_metric: cosine
+
+batch_size_override: 16

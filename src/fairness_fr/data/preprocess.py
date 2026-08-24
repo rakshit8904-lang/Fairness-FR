@@ -1,7 +1,7 @@
 """Dataset preprocessing for the fairness face recognition pipeline.
 
 This module is responsible for turning a raw, dataset-specific folder
-structure (as downloaded for RFW, BFW, or DemogPairs) into two
+structure (as used by BFW and LFW) into two
 standardized artifacts consumed by every later pipeline stage:
 
 1. A directory of preprocessed images, resized to a fixed square
@@ -20,7 +20,7 @@ Design notes:
     - Everything is streamed: scanners are generators, images are
       processed one at a time, and metadata rows are written
       incrementally to disk. No stage holds the full dataset in memory,
-      which matters at RFW/BFW scale (tens of thousands of images).
+      which matters at BFW/LFW scale (tens of thousands of images).
     - Corrupted or unreadable images are logged and skipped rather than
       raising, so a single bad file cannot abort a multi-hour run; a
       completely empty or failed run does raise, since that indicates a
@@ -160,51 +160,6 @@ class DatasetScanner(ABC):
         yield from sorted((p for p in directory.iterdir() if p.is_dir()), key=lambda p: p.name)
 
 
-class RFWScanner(DatasetScanner):
-    """Scanner for RFW (Racial Faces in-the-Wild).
-
-    Expected raw layout::
-
-        raw_dir/<ethnicity>/<identity>/<image>.jpg
-
-    where ``<ethnicity>`` is one of Caucasian, Asian, Indian, African and
-    is used directly as the demographic group.
-    """
-
-    def scan(self) -> Iterator[RawImageRecord]:
-        """Yield one record per image under ``raw_dir/<ethnicity>/<identity>/``.
-
-        Yields:
-            :class:`RawImageRecord` with ``demographic_group`` set to the
-            ethnicity subfolder name.
-
-        Raises:
-            DatasetScannerError: If the raw directory is missing or
-                contains no matching images.
-        """
-        raw_dir = self._require_raw_dir()
-        extension = self.dataset_config.image_extension
-        found_any = False
-
-        for ethnicity_dir in self._iter_subdirs(raw_dir):
-            demographic_group = ethnicity_dir.name
-            for identity_dir in self._iter_subdirs(ethnicity_dir):
-                identity = identity_dir.name
-                for image_path in sorted(identity_dir.glob(f"*{extension}")):
-                    found_any = True
-                    yield RawImageRecord(
-                        image_path=image_path,
-                        identity=identity,
-                        demographic_group=demographic_group,
-                    )
-
-        if not found_any:
-            raise DatasetScannerError(
-                f"No images matching '*{extension}' found under {raw_dir} "
-                f"using the expected RFW layout raw_dir/<ethnicity>/<identity>/*."
-            )
-
-
 class BFWScanner(DatasetScanner):
     """Scanner for BFW (Balanced Faces in the Wild).
 
@@ -275,101 +230,50 @@ class BFWScanner(DatasetScanner):
         return ethnicity, gender
 
 
-class DemogPairsScanner(DatasetScanner):
-    """Scanner for DemogPairs.
+class LFWScanner(DatasetScanner):
+    """Scanner for the Labeled Faces in the Wild (LFW) dataset.
 
     Expected raw layout::
 
         raw_dir/<identity>/<image>.jpg
-        raw_dir/demographics.csv   (optional)
 
-    DemogPairs does not organize images into demographic folders, so
-    group/gender/age labels are looked up from an optional
-    ``demographics.csv`` with columns ``identity, group, gender, age``.
-    Identities absent from that file fall back to a ``"unknown"`` group
-    rather than being dropped, so preprocessing never silently loses data.
+    LFW does not provide demographic labels in the downloaded image tree used
+    by this project. The identity is taken from the folder name and the
+    demographic group is assigned the neutral value ``"lfw"`` so that the
+    canonical metadata schema remains valid. Fairness analysis is intended
+    for BFW, where demographic attributes are available.
     """
 
-    _UNKNOWN_GROUP = "unknown"
+    _GROUP = "lfw"
 
     def scan(self) -> Iterator[RawImageRecord]:
-        """Yield one record per image under ``raw_dir/<identity>/``.
-
-        Yields:
-            :class:`RawImageRecord`, enriched with group/gender/age from
-            ``demographics.csv`` when available for that identity.
-
-        Raises:
-            DatasetScannerError: If the raw directory is missing or no
-                images are found.
-        """
+        """Yield one record per image under ``raw_dir/<identity>/``."""
         raw_dir = self._require_raw_dir()
         extension = self.dataset_config.image_extension
-        demographics = self._load_demographics_lookup(raw_dir)
         found_any = False
 
         for identity_dir in self._iter_subdirs(raw_dir):
             identity = identity_dir.name
-            demo = demographics.get(identity, {})
             for image_path in sorted(identity_dir.glob(f"*{extension}")):
                 found_any = True
                 yield RawImageRecord(
                     image_path=image_path,
                     identity=identity,
-                    demographic_group=demo.get("group", self._UNKNOWN_GROUP),
-                    gender=demo.get("gender"),
-                    age=demo.get("age"),
+                    demographic_group=self._GROUP,
+                    gender=None,
+                    age=None,
                 )
 
         if not found_any:
             raise DatasetScannerError(
                 f"No images matching '*{extension}' found under {raw_dir} "
-                f"using the expected DemogPairs layout raw_dir/<identity>/*."
+                f"using the expected LFW layout raw_dir/<identity>/*."
             )
-
-    def _load_demographics_lookup(self, raw_dir: Path) -> dict[str, dict[str, str]]:
-        """Load an optional identity -> demographic-fields lookup table.
-
-        Args:
-            raw_dir: The dataset's raw directory, expected to optionally
-                contain a ``demographics.csv`` file.
-
-        Returns:
-            A mapping from identity to a dict of available fields among
-            ``group``, ``gender``, ``age``. Empty if no file is present.
-        """
-        demographics_path = raw_dir / "demographics.csv"
-        if not demographics_path.exists():
-            logger.warning(
-                "No demographics.csv found for DemogPairs at %s; all identities "
-                "will be labeled with demographic_group='%s'.",
-                demographics_path,
-                self._UNKNOWN_GROUP,
-            )
-            return {}
-
-        lookup: dict[str, dict[str, str]] = {}
-        with demographics_path.open("r", encoding="utf-8", newline="") as fh:
-            for row in csv.DictReader(fh):
-                identity = row.get("identity")
-                if not identity:
-                    continue
-                lookup[identity] = {
-                    key: value
-                    for key, value in (
-                        ("group", row.get("group")),
-                        ("gender", row.get("gender")),
-                        ("age", row.get("age")),
-                    )
-                    if value
-                }
-        return lookup
 
 
 _SCANNER_REGISTRY: dict[DatasetName, type[DatasetScanner]] = {
-    DatasetName.RFW: RFWScanner,
     DatasetName.BFW: BFWScanner,
-    DatasetName.DEMOGPAIRS: DemogPairsScanner,
+    DatasetName.LFW: LFWScanner,
 }
 
 

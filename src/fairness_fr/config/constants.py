@@ -20,7 +20,7 @@ from enum import Enum
 class DatasetName(str, Enum):
     """Supported fairness-focused face datasets."""
 
-    RFW = "rfw"
+    LFW = "lfw"
     BFW = "bfw"
     DEMOGPAIRS = "demogpairs"
 

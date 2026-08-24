@@ -5,7 +5,11 @@ datasets:
 
 models:
   - arcface
+  - facenet512
+  - ghostfacenet
+  - mobilefacenet
+  - sface
 
-demographic_attribute: ethnicity
+demographic_attribute: gender
 
 run_improvement_stage: false

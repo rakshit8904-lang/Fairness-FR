@@ -1,0 +1,4 @@
+split,total_pairs,scored_pairs,skipped_missing_embedding,failed_pairs,processing_time_seconds
+train,13774,13774,0,0,0.2086
+validation,2952,2952,0,0,0.0697
+test,2952,2952,0,0,0.0771

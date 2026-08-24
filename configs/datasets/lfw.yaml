@@ -1,0 +1,15 @@
+name: lfw
+
+raw_dir: data/lfw
+
+processed_dir: data/processed/lfw
+
+metadata_csv: data/metadata/lfw_metadata.csv
+
+has_official_pairs: false
+
+official_pairs_dir: null
+
+demographic_attributes: []
+
+image_extension: ".jpg"

@@ -1,0 +1,10 @@
+FAIRNESS-FR — IMAGE QUALITY FAIRNESS STRESS TEST
+STEP 4A — GAUSSIAN BLUR
+
+Total pairs: 918
+Female-Female pairs: 498
+Male-Male pairs: 203
+Threshold: 0.1546
+
+NOTE:
+This first stage records the baseline metrics and planned blur conditions. Actual blur-induced recognition changes require ArcFace embeddings to be re-extracted from the degraded images.

@@ -1,0 +1,17 @@
+{
+    "dataset": "BFW",
+    "model": "ArcFace",
+    "evaluation": "same-gender threshold fairness stress test",
+    "total_pairs": 918,
+    "female_female_pairs": 498,
+    "male_male_pairs": 203,
+    "threshold_min": 0.05,
+    "threshold_max": 0.9500000000000002,
+    "threshold_step": 0.01,
+    "best_fairness_threshold": 0.15000000000000002,
+    "minimum_mean_disparity": 0.003852944630302446,
+    "best_fairness_fmr_disparity": 0.0007739938080495445,
+    "best_fairness_fnmr_disparity": 0.004638218923933235,
+    "best_fairness_tar_disparity": 0.004638218923933235,
+    "best_fairness_accuracy_disparity": 0.00536134686529377
+}

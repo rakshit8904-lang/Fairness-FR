@@ -1,0 +1,35 @@
+======================================================================
+FAIRNESS-FR — FAIRNESS–PERFORMANCE TRADE-OFF SUMMARY
+======================================================================
+
+Dataset: bfw
+Model: arcface
+Total pairs: 918
+Female-Female pairs: 498
+Male-Male pairs: 203
+
+FAIRNESS-OPTIMAL THRESHOLD
+Threshold: 0.154624
+Accuracy: 0.891068
+TAR: 0.873638
+FMR: 0.091503
+FNMR: 0.126362
+Mean disparity: 0.003864
+
+ACCURACY-OPTIMAL THRESHOLD
+Threshold: 0.185263
+Accuracy: 0.894336
+Mean disparity: 0.013086
+
+BALANCED THRESHOLD
+Threshold: 0.154624
+Accuracy: 0.891068
+Mean disparity: 0.003864
+Balanced score: 0.943602
+
+FAIRNESS-CONSTRAINED THRESHOLD (mean disparity <= 0.01)
+Threshold: 0.148497
+Accuracy: 0.891068
+Mean disparity: 0.008363
+
+Pareto candidates: 2

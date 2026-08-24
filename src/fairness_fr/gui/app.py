@@ -440,13 +440,29 @@ def page_score_distribution(selection: dict) -> None:
 
 def page_fairness(selection: dict) -> None:
     """Render the Fairness / Group Analysis page."""
-    ui.page_header("Fairness / Group Analysis", "Verification performance broken down by demographic group")
+    ui.page_header(
+        "Fairness / Group Analysis",
+        "Verification performance broken down by demographic group",
+    )
+
     dataset, model = selection["dataset"], selection["model"]
+
     if dataset is None or model is None:
         st.info("Select a dataset and an evaluated model in the sidebar.")
         return
 
+    # LFW does not have demographic attributes in this experiment.
+    # Fairness analysis is therefore performed only for BFW.
+    if dataset == "lfw":
+        st.info(
+            "Demographic fairness analysis is not applicable to LFW in this "
+            "experiment because the LFW metadata does not contain demographic "
+            "attributes. Fairness evaluation is provided using BFW."
+        )
+        return
+
     fairness_result = dl.load_fairness_metrics(dataset, model)
+
     if not fairness_result.available:
         ui.missing_file_notice(fairness_result, "Group-wise fairness metrics")
         st.info("Run the pipeline with --fairness to generate this.")
@@ -454,9 +470,14 @@ def page_fairness(selection: dict) -> None:
 
     table = fairness_result.data
     attribute_options = sorted(table["attribute"].unique().tolist())
-    chosen_attribute = st.selectbox("Attribute", attribute_options, key="fairness_attribute")
-    attribute_table = table.loc[table["attribute"] == chosen_attribute].copy()
-
+    chosen_attribute = st.selectbox(
+        "Attribute",
+        attribute_options,
+        key="fairness_attribute",
+    )
+    attribute_table = table.loc[
+        table["attribute"] == chosen_attribute
+    ].copy()
     display_columns = [
         "group_value", "sample_size", "genuine_pairs", "impostor_pairs",
         "far", "frr", "fmr", "fnmr", "eer", "excluded", "exclusion_reason",

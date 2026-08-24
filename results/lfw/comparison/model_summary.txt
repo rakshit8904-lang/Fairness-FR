@@ -1,0 +1,22 @@
+======================================================================
+MODEL COMPARISON SUMMARY
+======================================================================
+
+Best-performing model (accuracy): facenet512 (accuracy=0.9604).
+Model with lowest EER: facenet512 (EER=0.0400).
+Model with highest TAR: facenet512 (TAR=0.9600).
+Fairness disparity data was unavailable for all models.
+
+Overall ranking (best to worst):
+  1. facenet512 (score=1.00)
+  2. arcface (score=2.00)
+  3. ghostfacenet (score=3.00)
+  4. sface (score=4.00)
+
+Per-model notes:
+  - arcface: strengths: no standout strengths; weaknesses: no fairness data available.
+  - facenet512: strengths: highest accuracy, lowest EER, highest TAR; weaknesses: no fairness data available.
+  - ghostfacenet: strengths: no standout strengths; weaknesses: no fairness data available.
+  - sface: strengths: no standout strengths; weaknesses: no fairness data available, highest FAR, highest FRR.
+
+======================================================================
