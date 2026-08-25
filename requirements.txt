@@ -11,3 +11,4 @@ pydantic-settings>=2.2,<3.0
 tqdm>=4.66,<5.0
 torch
 torchvision
+scikit-learn>=1.5,<2.0
