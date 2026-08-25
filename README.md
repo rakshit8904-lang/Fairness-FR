@@ -1,6 +1,10 @@
 # ⚖️ Fairness-FR
 ## Demographic Fairness Evaluation of Face Recognition Systems
 
+## 🚀 Live Demo
+
+🔗 [Open FairFaceEval – Fairness Evaluation of Face Recognition](https://fairness-fr-urnisa.streamlit.app)
+
 ---
 
 ## 📌 Overview
